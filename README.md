@@ -2,4 +2,4 @@
 
 AtCoder training
 
-- https://atcoder.jp/contests/abc171
+- https://atcoder.jp/contests/
