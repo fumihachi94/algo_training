@@ -22,6 +22,9 @@ int sum(int a) {
 
 int main()
 {
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+  
   int p;
   ll ans=0;
   
@@ -31,12 +34,10 @@ int main()
   for(int n=0; n<N; n++){
     cin >> p;
     B[n] = make_pair(p, n+1);
-    bit[n+1] = 1;
+    add(B[n].first, 1);
    }
   
   sort(B.begin(), B.end());
-  
-  for (int n = 1; n < N+1; ++n) bit[n + (n & -n)] += bit[n];
   
   for (int n = 0; n < N; ++n){
     int range_l = sum(B[n].second) -1;

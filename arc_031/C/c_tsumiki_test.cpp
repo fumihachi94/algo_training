@@ -34,16 +34,15 @@ int main()
 		for(int n=0; n<N; n++){
 			cin >> p;
             B[n] = make_pair(p, n+1);
-            bit[n+1] = 1;
+            // bit[n+1] = 1;
+            add(B[n].first, 1);
             // cout << B[n].first << " ";
 		}
 
         sort(B.begin(), B.end());
 
-        for (int n = 1; n < N+1; ++n) bit[n + (n & -n)] += bit[n];
-
-        // cout << endl;
-        // for(int n=0; n<N; n++) cout << B[n].first << ":" << B[n].second << " ";
+        // cout <<  endl;
+        // for(int n=1; n<=N; n++) cout << bit[n] << " ";
 
         // cout << endl;
         for (int n = 0; n < N; ++n){
@@ -51,6 +50,8 @@ int main()
             dst[i] += min(range_l, sum(N) -1 - range_l);
             add(B[n].second, -1);
         }
+        // for(int n=1; n<=N; n++) cout << bit[n] << " ";
+        // cout << endl;
         // cout << dst[i] << endl;
 	}
 
