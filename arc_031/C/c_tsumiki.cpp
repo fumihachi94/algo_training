@@ -1,83 +1,60 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 #include <fstream>
+#include <vector>
+#include <algorithm> 
+#include <map>
 using namespace std; 
+#define ll long long
 
-int detect(int N, vector<int> A){
-	vector<int>::iterator iter = max_element(A.begin(), A.end());
-	size_t max_index = distance(A.begin(), iter);
-	if(max_index!=0){
-		for(int n=max_index; n>0; n--){
-			if(A[n] - A[n-1] < 0) return 1;
-		}
-	}
-	if(max_index!=N){
-		for(int n=max_index; n<N-1; n++){
-			if(A[n] - A[n+1] < 0) return 1;
-		}
-	}
-	return 0;
+int N;
+int bit[100010];
+
+void add(int a, int w) {
+    for (int x = a; x <= N; x += x & -x) bit[x] += w;
 }
 
-int chnage_order(int N, vector<int> A){
-
-	int count = 0;
-
-	// while (detect(N, A))
-	while (true)
-	{
-		if(N == 1) break;
-		vector<int>::iterator iter = min_element(A.begin(), A.end());
-		size_t min_index = distance(A.begin(), iter);
-
-		if(min_index==0) {
-			A.erase(A.begin());
-			N--;
-			continue;
-		}
-		else if(min_index==N-1){
-			A.pop_back();
-			N--;
-			continue;
-		}
-
-		int tmp = A[min_index];
-		if(min_index < N/2){
-			A[min_index] = A[min_index-1];
-			A[min_index-1] = tmp;
-			count++;
-		}else{
-			A[min_index] = A[min_index+1];
-			A[min_index+1] = tmp;
-			count++;
-		}
-	}
-
-	return count;
+int sum(int a) {
+    int ret = 0;
+    for (int x = a; x > 0; x -= x & -x) ret += bit[x];
+    return ret;
 }
+
 
 int main()
 {
 	ifstream in("input.txt");
 	cin.rdbuf(in.rdbuf());
 	
-	int dst[3];
+	ll dst[3]{};
 
 	for(int i=0; i<3; i++){
-		int N;
 		cin >> N;
-		vector<int> A(N);
-
+        vector<pair<int, int>> B(N);
+        int p;
 		for(int n=0; n<N; n++){
-			cin >> A[n];
-			// cout << A[n] << " " ;
+			cin >> p;
+            B[n] = make_pair(p, n+1);
+            bit[n+1] = 1;
+            // cout << B[n].first << " ";
 		}
-		// cout << chnage_order(N, A);
-		dst[i] = chnage_order(N, A);
+
+        sort(B.begin(), B.end());
+
+        for (int n = 1; n < N+1; ++n) bit[n + (n & -n)] += bit[n];
+
+        // cout << endl;
+        // for(int n=0; n<N; n++) cout << B[n].first << ":" << B[n].second << " ";
+
+        // cout << endl;
+        for (int n = 0; n < N; ++n){
+            int range_l = sum(B[n].second) -1;
+            dst[i] += min(range_l, sum(N) -1 - range_l);
+            add(B[n].second, -1);
+        }
+        // cout << dst[i] << endl;
 	}
 
-	// 答え合わせ
+    // 答え合わせ
 	ifstream an("answer.txt");
 	cin.rdbuf(an.rdbuf());
 	for(int i=0; i<3; i++){
@@ -87,6 +64,6 @@ int main()
 		if(dst[i]==ans) cout <<  " " << "OK\n";
 		else cout << " " << "NG\n";
 	}
-
+    
 	return 0;
 }	
