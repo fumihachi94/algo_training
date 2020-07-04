@@ -22,48 +22,28 @@ int sum(int a) {
 
 int main()
 {
-	ifstream in("input.txt");
-	cin.rdbuf(in.rdbuf());
-	
-	ll dst[3]{};
-
-	for(int i=0; i<3; i++){
-		cin >> N;
-        vector<pair<int, int>> B(N);
-        int p;
-		for(int n=0; n<N; n++){
-			cin >> p;
-            B[n] = make_pair(p, n+1);
-            bit[n+1] = 1;
-            // cout << B[n].first << " ";
-		}
-
-        sort(B.begin(), B.end());
-
-        for (int n = 1; n < N+1; ++n) bit[n + (n & -n)] += bit[n];
-
-        // cout << endl;
-        // for(int n=0; n<N; n++) cout << B[n].first << ":" << B[n].second << " ";
-
-        // cout << endl;
-        for (int n = 0; n < N; ++n){
-            int range_l = sum(B[n].second) -1;
-            dst[i] += min(range_l, sum(N) -1 - range_l);
-            add(B[n].second, -1);
-        }
-        // cout << dst[i] << endl;
-	}
-
-    // 答え合わせ
-	ifstream an("answer.txt");
-	cin.rdbuf(an.rdbuf());
-	for(int i=0; i<3; i++){
-		int ans;
-		cin >> ans;
-		cout << "No." << i << ": " << dst[i];
-		if(dst[i]==ans) cout <<  " " << "OK\n";
-		else cout << " " << "NG\n";
-	}
-    
-	return 0;
+  int p;
+  ll ans=0;
+  
+  cin >> N;
+  vector<pair<int, int>> B(N);
+  
+  for(int n=0; n<N; n++){
+    cin >> p;
+    B[n] = make_pair(p, n+1);
+    bit[n+1] = 1;
+   }
+  
+  sort(B.begin(), B.end());
+  
+  for (int n = 1; n < N+1; ++n) bit[n + (n & -n)] += bit[n];
+  
+  for (int n = 0; n < N; ++n){
+    int range_l = sum(B[n].second) -1;
+    ans += min(range_l, sum(N) -1 - range_l);
+    add(B[n].second, -1);
+  }
+  cout << ans << endl;
+  
+  return 0;
 }	
